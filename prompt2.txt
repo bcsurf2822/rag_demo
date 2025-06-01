@@ -1,0 +1,46 @@
+🔧 RAG AI Agent Task Prompt
+
+You are working on a Retrieval-Augmented Generation (RAG) AI Agent. The foundational components of the project are complete — including document ingestion, chunking, vector embedding, Supabase pgvector setup, and Pydantic AI-based agent responses via Streamlit.
+
+The next phase is focused on drastically improving the agent’s performance, particularly:
+	•	Response accuracy
+	•	Token usage visibility
+	•	User-facing response formatting
+	•	Expanded file type support (especially DOCX)
+
+🧠 Your Tasks:
+	1.	Improve Retrieval Accuracy and Context Use
+	•	Implement semantic re-ranking of results before generating responses.
+	•	Experiment with multi-query expansion to improve relevant chunk recall.
+	•	Reduce hallucinations and off-topic answers by applying stricter context filtering logic.
+	•	Add metadata filtering and sorting for document selection during retrieval.
+	2.	Enhance DOCX Ingestion
+	•	Refine DOCX handling to support complex layouts (e.g., tables, headers, styled sections).
+	•	Validate that DOCX chunks are properly embedded and stored with metadata.
+	3.	Implement Observability and Debug Tools
+	•	Visualize:
+	•	Total tokens used (query + context + response).
+	•	Time taken for vector search and LLM response.
+	•	Context relevance/match scores.
+	•	Display source chunks and highlight matched sections in responses.
+	•	Log and graph latency over time for debugging.
+	4.	Response Quality Enhancements
+	•	Add markdown formatting (e.g., headers, bullet points, bold highlights).
+	•	Append document sources and citations inline with responses.
+	•	Add a feedback widget (thumbs up/down) to rate response quality.
+	5.	Future-Ready Features (Design or Prototype)
+	•	Chunk versioning and re-ingestion tracking.
+	•	Expose the RAG process as an API endpoint.
+	•	Admin UI for monitoring ingestion, queries, feedback.
+
+⸻
+
+🛠️ Use These Guidelines When Performing Tasks:
+	•	Use the Supabase MCP server to create the necessary database tables with the pgvector extension enabled.
+	•	For document processing, use PyPDF2 for PDFs rather than complex libraries — keep it simple and maintainable.
+	•	Use the Crawl4AI RAG MCP server, which already has:
+	•	Pydantic AI docs
+	•	Supabase Python SDK docs
+	•	This is your primary source for in-app RAG queries.
+	•	Use the Brave MCP server to search the open web for supplemental documentation, examples, and clarification when building or debugging.
+	•	After reading the TASK.md file and planning documents, immediately perform documentation retrieval using the Crawl4AI and Brave MCP servers.

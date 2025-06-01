@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/benjamincorbett/code/agents/supabase_mcp_server/test_embeddings_directly.py", line 20, in <module>
+    from src.utils.embeddings import generate_embedding
+  File "/Users/benjamincorbett/code/agents/supabase_mcp_server/src/utils/embeddings.py", line 8, in <module>
+    import openai
+ModuleNotFoundError: No module named 'openai'

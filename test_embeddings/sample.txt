@@ -1,0 +1,49 @@
+# Sample Document for Embedding Testing
+
+## Introduction
+
+This is a sample document that will be used to test the document chunking and embedding functionality of our RAG AI Agent. This document contains multiple paragraphs, sentences of varying lengths, and some formatting to test the chunking algorithm's ability to handle different text structures.
+
+## Document Chunking
+
+Document chunking is a critical component of our RAG (Retrieval Augmented Generation) system. It involves breaking down large documents into smaller, semantically meaningful pieces that can be effectively embedded and retrieved.
+
+Good chunking strategies consider:
+- Natural semantic boundaries (paragraphs, sections)
+- Optimal chunk size for the embedding model
+- Appropriate overlap between chunks for context preservation
+- Handling of special formatting and structures
+
+## Vector Embeddings
+
+After chunking, each text segment is converted into a vector embedding using OpenAI's embedding model. These embeddings capture the semantic meaning of the text in a high-dimensional space.
+
+Key considerations for embeddings include:
+1. Choosing the right embedding model (we use text-embedding-3-small)
+2. Ensuring chunks are within the token limits of the model
+3. Managing the dimensionality of the vectors (1536 dimensions for our model)
+4. Storing and indexing the vectors efficiently in Supabase
+
+## Testing Methodology
+
+This document will be processed through our pipeline:
+1. The document will be loaded and parsed
+2. The text will be split into chunks using our improved chunking algorithm
+3. Each chunk will be embedded using the OpenAI API
+4. The chunks and their embeddings will be stored in Supabase
+5. We'll verify that the chunks were properly stored by querying them
+
+## Expected Results
+
+We expect to see:
+- Multiple chunks created from this document
+- Each chunk having a reasonable token count (below model limits)
+- Chunks respecting semantic boundaries where possible
+- All chunks successfully embedded and stored in the database
+- The ability to retrieve these chunks using semantic search
+
+## Conclusion
+
+By testing with this document, we aim to validate the improvements made to our chunking algorithm and ensure that the entire pipeline from document ingestion to vector storage is working correctly.
+
+The end-to-end testing will help identify any issues in the chunking process, embedding generation, or database storage that need to be addressed to make our RAG system more effective. 
