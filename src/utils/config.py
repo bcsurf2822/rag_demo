@@ -5,7 +5,7 @@ import os
 from typing import Union, Optional
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
+
 load_dotenv()
 
 # OpenAI API Configuration

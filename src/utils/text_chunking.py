@@ -32,7 +32,7 @@ def get_token_count(text: str, model: str = OPENAI_EMBEDDING_MODEL) -> int:
         return len(encoding.encode(text))
     except Exception as e:
         logger.warning(f"Error counting tokens, falling back to character estimate: {e}")
-        # Fallback to approximate tokens (1 token ~= 4 chars for English text)
+        # Fallback to approximate tokens
         return len(text) // 4
 
 def chunk_text(text: str, chunk_size: int = CHUNK_SIZE, 
@@ -51,7 +51,7 @@ def chunk_text(text: str, chunk_size: int = CHUNK_SIZE,
     if not text:
         return []
     
-    # Clean the text
+    # Clean
     text = text.strip()
     
     # If text is smaller than chunk_size, return it as a single chunk
@@ -103,7 +103,7 @@ def chunk_text(text: str, chunk_size: int = CHUNK_SIZE,
     chunks = [chunk for chunk in chunks if chunk]
     
     # Check if any chunk might exceed the token limit for embeddings
-    max_token_limit = 8000  # OpenAI embedding model limit for text-embedding-3-small
+    max_token_limit = 8000
     
     # Collect chunks that may need further splitting
     final_chunks = []
@@ -165,7 +165,7 @@ def chunk_text_with_metadata(text: str, metadata: Optional[Dict[str, Any]] = Non
             "metadata": chunk_metadata
         })
     
-    # Log token counts for all chunks to help debug embedding issues
+    # Log token counts for all chunks
     for i, chunk in enumerate(result):
         tokens = get_token_count(chunk["content"])
         logger.debug(f"Chunk {i}: {tokens} tokens, {len(chunk['content'])} characters")
