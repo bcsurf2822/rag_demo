@@ -92,8 +92,7 @@ class SemanticReranker:
             
         logger.info(f"Cross-encoder re-ranking {len(results)} results")
         
-        # For now, we'll use a simple approach based on text overlap and embedding similarity
-        # In production, you might want to use a dedicated cross-encoder model
+    
         
         query_words = set(query.lower().split())
         reranked_results = []

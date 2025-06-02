@@ -46,7 +46,7 @@ class DocumentProcessor:
             "filename": filename
         }
         
-        # Chunk the document
+        # Chunk  document
         chunks = chunk_text_with_metadata(content, metadata, chunk_size, chunk_overlap)
         
         # Process chunks in batches to optimize embedding generation

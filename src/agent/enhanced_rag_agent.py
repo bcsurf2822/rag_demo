@@ -350,10 +350,10 @@ class EnhancedRAGAgent:
         else:
             length_factor = 1.0
         
-        # Combine factors
+     
         confidence = avg_similarity * source_factor * length_factor
         
-        return min(max(confidence, 0.0), 1.0)  # Clamp to [0, 1]
+        return min(max(confidence, 0.0), 1.0) 
     
     def get_performance_summary(self) -> Dict[str, Any]:
         """

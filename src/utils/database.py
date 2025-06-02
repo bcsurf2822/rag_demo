@@ -155,5 +155,5 @@ class SupabaseManager:
         for i, row in enumerate(response.data):
             logger.info(f"Chunk {i} embedding (first 5): {row['embedding'][:5]}, content: {row['content'][:100]}")
 
-# Create a singleton instance
+
 supabase_manager = SupabaseManager() 

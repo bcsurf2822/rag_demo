@@ -20,13 +20,13 @@ class FastAgentContext(BaseModel):
     Fast context for optimized RAG agent.
     """
     # Optimized search parameters
-    match_count: int = 5  # Reduced default
+    match_count: int = 5 
     match_threshold: float = 0.3
-    rerank_top_k: int = 3  # Minimal for speed
+    rerank_top_k: int = 3 
     
     # Performance settings
     use_caching: bool = True
-    parallel_timeout: float = 8.0  # Shorter timeout
+    parallel_timeout: float = 8.0 
     
     # Session tracking
     session_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -57,19 +57,18 @@ class FastRAGAgent:
         """Initialize the fast RAG agent."""
         self.optimized_search = OptimizedVectorSearch()
         
-        # FIX: Use simple string output instead of complex structured output
-        # This prevents the "Exceeded maximum retries for result validation" error
+      
+   
         self.agent = Agent(
             model_name,
             deps_type=FastAgentContext,
-            output_type=str,  # Changed from FastAgentResponse to str
+            output_type=str,  
             system_prompt=self._get_optimized_system_prompt(),
             instrument=True,
-            # Add retry settings for better error handling
-            max_retries=2  # Allow more retries for robustness
+            max_retries=2  
         )
         
-        # Register fast search tool
+        # Fast search tool
         self.agent.tool(self._fast_knowledge_search)
     
     def _get_optimized_system_prompt(self) -> str:
@@ -210,7 +209,7 @@ class FastRAGAgent:
                 )
                 
                 # Extract the simple string answer
-                answer_text = result.data  # Now this is just a string
+                answer_text = result.data  
                 
                 # Extract search metadata from context
                 search_results = getattr(context, '_search_results', [])
@@ -282,7 +281,7 @@ class FastRAGAgent:
     def _calculate_enhanced_confidence(self, search_results: List[Dict[str, Any]], 
                                      answer: str, search_metrics: Any) -> float:
         """
-        Enhanced confidence calculation based on 2024 RAG best practices.
+        Enhanced confidence calculation based on RAG best practices.
         
         Args:
             search_results: Retrieved search results.
@@ -309,12 +308,12 @@ class FastRAGAgent:
         
         # 4. Answer completeness factor (optimal length indicates good coverage)
         answer_words = len(answer.split())
-        if 20 <= answer_words <= 200:  # Sweet spot for RAG answers
+        if 20 <= answer_words <= 200:  
             completeness_factor = 1.0
         elif answer_words < 20:
-            completeness_factor = 0.7  # Too short
+            completeness_factor = 0.7  
         else:
-            completeness_factor = 0.9  # Too long
+            completeness_factor = 0.9   
         
         # 5. Search performance factor (fast retrieval indicates good indexing)
         speed_factor = 1.0
@@ -324,9 +323,9 @@ class FastRAGAgent:
             elif search_metrics.search_time_ms > 5000:  # Over 5 seconds
                 speed_factor = 0.9
         
-        # Combine all factors with proper weighting
-        confidence = (avg_score * 0.4 +  # Primary factor
-                     quality_bonus +      # High-quality sources
+        
+        confidence = (avg_score * 0.4 +  
+                     quality_bonus +      
                      diversity_bonus) * completeness_factor * speed_factor
         
         return min(max(confidence, 0.0), 1.0)  # Clamp to [0, 1]

@@ -25,7 +25,7 @@ class EmbeddingGenerator:
         if not self.api_key:
             raise ValueError("OpenAI API key must be provided as OPENAI_API_KEY environment variable.")
         
-        # Set up the OpenAI client
+      
         self.client = OpenAI(api_key=self.api_key)
         
         # Default embedding dimension for text-embedding-3-small

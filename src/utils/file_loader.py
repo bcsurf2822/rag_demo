@@ -31,7 +31,7 @@ def load_text_file(file_path: str) -> str:
         with open(file_path, 'r', encoding='utf-8') as file:
             return file.read()
     except UnicodeDecodeError:
-        # Try with a different encoding if UTF-8 fails
+
         try:
             with open(file_path, 'r', encoding='latin-1') as file:
                 return file.read()
@@ -155,7 +155,7 @@ def extract_file_content(file_obj: Any, file_name: Optional[str] = None) -> Dict
             doc = Document(file_obj)
             content = ""
             
-            # Extract text from paragraphs
+           
             for paragraph in doc.paragraphs:
                 content += paragraph.text + "\n"
             
@@ -202,11 +202,11 @@ def load_docx_file(file_path: str) -> str:
         doc = Document(file_path)
         text = ""
         
-        # Extract text from paragraphs
+  
         for paragraph in doc.paragraphs:
             text += paragraph.text + "\n"
         
-        # Extract text from tables
+ 
         for table in doc.tables:
             for row in table.rows:
                 for cell in row.cells:

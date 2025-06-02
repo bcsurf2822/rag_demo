@@ -1,6 +1,3 @@
-"""
-Optimized vector search module with parallel processing and caching.
-"""
 import logging
 import asyncio
 from typing import List, Dict, Any, Optional, Tuple
@@ -22,10 +19,10 @@ logger = logging.getLogger(__name__)
 @dataclass
 class SearchConfig:
     """Configuration for optimized search."""
-    match_count: int = 8  # Reduced from 10-15
+    match_count: int = 8  
     match_threshold: float = 0.3
-    rerank_top_k: int = 5  # Reduced from 10
-    expansion_queries: int = 1  # Reduced from 2-3
+    rerank_top_k: int = 5  
+    expansion_queries: int = 1  
     enable_caching: bool = True
     parallel_timeout: float = 10.0
 
@@ -67,11 +64,11 @@ class OptimizedVectorSearch:
         config = config or SearchConfig()
         
         with PerformanceTimer("fast_search_with_reranking") as timer:
-            # Check cache first
+            # Check cache 
             cache_key = self._get_query_hash(query, config)
             if config.enable_caching and cache_key in self._query_cache:
                 cached_results, cached_time = self._query_cache[cache_key]
-                if time.time() - cached_time < 300:  # 5-minute cache
+                if time.time() - cached_time < 300:  
                     logger.info(f"Using cached results for query: '{query}'")
                     metrics = SearchMetrics(
                         query=query,
@@ -88,7 +85,7 @@ class OptimizedVectorSearch:
                     self.executor,
                     lambda: VectorSearch.search(
                         query,
-                        config.match_count * 2,  # Get more for better reranking
+                        config.match_count * 2,  
                         config.match_threshold
                     )
                 )
@@ -116,7 +113,7 @@ class OptimizedVectorSearch:
             # Cache results
             if config.enable_caching:
                 self._query_cache[cache_key] = (reranked_results, time.time())
-                # Limit cache size
+               
                 if len(self._query_cache) > 50:
                     oldest_key = min(self._query_cache.keys(), 
                                    key=lambda k: self._query_cache[k][1])
@@ -132,7 +129,7 @@ class OptimizedVectorSearch:
                 max_similarity=max(similarities) if similarities else 0,
                 min_similarity=min(similarities) if similarities else 0,
                 used_reranking=True,
-                used_cache=False  # Explicitly set since we didn't use cache
+                used_cache=False  
             )
             
             return reranked_results, metrics
@@ -214,7 +211,7 @@ class OptimizedVectorSearch:
                 async_vector_search(query, config.match_count, config.match_threshold)
             )
             
-            # Wait for expansion queries
+         
             expansion_queries = await expansion_task
             
             # Launch parallel searches for expansion queries
@@ -225,7 +222,7 @@ class OptimizedVectorSearch:
                 for exp_query in expansion_queries
             ]
             
-            # Wait for all searches with timeout
+     
             try:
                 all_tasks = [original_search_task] + expansion_tasks
                 results_list = await asyncio.wait_for(
@@ -267,7 +264,7 @@ class OptimizedVectorSearch:
                 min_similarity=min(similarities) if similarities else 0,
                 used_reranking=True,
                 used_multi_query=True,
-                used_cache=False,  # Not using cache in multi-query
+                used_cache=False,  
                 expansion_queries=expansion_queries
             )
             
@@ -294,8 +291,8 @@ class OptimizedVectorSearch:
             response = await self.client.chat.completions.create(
                 model=OPENAI_MODEL,
                 messages=[{"role": "user", "content": prompt}],
-                max_tokens=50,  # Reduced from 200
-                temperature=0.3  # Lower for consistency
+                max_tokens=50,  
+                temperature=0.3  
             )
             
             expansion = response.choices[0].message.content.strip()
@@ -309,7 +306,7 @@ class OptimizedVectorSearch:
                                    config: SearchConfig = None) -> Tuple[List[Dict[str, Any]], SearchMetrics]:
         """
         Smart adaptive search that chooses the best strategy based on query characteristics.
-        Implements 2024 RAG best practices for optimal retrieval.
+        Implements RAG best practices for optimal retrieval.
         
         Args:
             query: Search query.
@@ -320,7 +317,7 @@ class OptimizedVectorSearch:
         """
         config = config or SearchConfig()
         
-        # Enhanced query analysis using 2024 best practices
+        # Enhanced query analysis 
         query_words = query.split()
         query_length = len(query_words)
         
@@ -342,19 +339,19 @@ class OptimizedVectorSearch:
         logger.info(f"Query analysis: length={query_length}, complex={has_multiple_concepts}, "
                    f"technical={is_technical}, question={is_question}")
         
-        # Smart strategy selection based on 2024 RAG research
+        # Smart strategy selection
         if query_length > 12 or (has_multiple_concepts and query_length > 6):
-            # Complex/multi-faceted query - use multi-query approach
+   
             logger.info("Using multi-query strategy for complex query")
             return await self.parallel_multi_query_search(query, config)
         
         elif is_technical and query_length > 4:
-            # Technical query - use enhanced reranking for precision
+
             logger.info("Using enhanced reranking for technical query")
             # Increase match count for better recall, then rerank for precision
             enhanced_config = SearchConfig(
                 match_count=config.match_count * 2,
-                match_threshold=config.match_threshold * 0.8,  # Lower threshold for recall
+                match_threshold=config.match_threshold * 0.8,  
                 rerank_top_k=config.rerank_top_k,
                 enable_caching=config.enable_caching,
                 parallel_timeout=config.parallel_timeout
